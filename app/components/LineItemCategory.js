@@ -1,13 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-    Feather,
-    Entypo,
-    MaterialIcons,
-    MaterialCommunityIcons,
-    FontAwesome
-} from 'react-native-vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import { colors, gStyle } from '../constants';
 
 const LineItemCategory = ({

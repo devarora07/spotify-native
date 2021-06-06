@@ -1,47 +1,48 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Home, Library, Search } from '../screens';
+import { Library, Search } from '../screens';
 import { APP_ROUTES } from './navigationConstant';
+import HomeStack from './stackHome';
+import CustomTabBar from '../components/CustomTabBar';
+import SvgTabHome from '../components/icons/Svg.TabHome';
+import SvgTabSearch from '../components/icons/Svg.TabSearch';
+import SvgTabLibrary from '../components/icons/Svg.TabLibrary';
+import { colors } from '../constants';
 
 const Tab = createBottomTabNavigator();
+
+type IconProps = {
+    focused: boolean;
+};
+
+const HomeIcon = ({ focused }: IconProps) => <SvgTabHome active={focused} />;
+const SearchIcon = ({ focused }: IconProps) => (
+    <SvgTabSearch active={focused} />
+);
+const LibraryIcon = ({ focused }: IconProps) => (
+    <SvgTabLibrary active={focused} />
+);
 
 export function BottomNavigation() {
     return (
         <Tab.Navigator
+            tabBar={(props) => <CustomTabBar {...props} />}
             initialRouteName={APP_ROUTES.HOME}
             tabBarOptions={{
-                activeTintColor: '#e91e63',
-                showLabel: false,
+                activeTintColor: colors.white,
+                inactiveTintColor: colors.greyInactive,
                 style: {
-                    position: 'absolute',
-                    bottom: 10,
-                    left: 10,
-                    right: 10,
-                    // elevation: 0,
-                    backgroundColor: 'white',
-                    borderRadius: 15,
-                    height: 60,
-                    ...styles.shadow
+                    backgroundColor: colors.grey,
+                    borderTopWidth: 0
                 }
             }}
         >
             <Tab.Screen
                 name={APP_ROUTES.HOME}
-                component={Home}
+                component={HomeStack}
                 options={{
                     tabBarLabel: 'Home',
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <View style={styles.view}>
-                            <MaterialIcons
-                                name="home"
-                                color={color}
-                                size={size}
-                            />
-                        </View>
-                    )
+                    tabBarIcon: HomeIcon
                 }}
             />
             <Tab.Screen
@@ -49,13 +50,7 @@ export function BottomNavigation() {
                 component={Search}
                 options={{
                     tabBarLabel: 'Search',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons
-                            name="search"
-                            color={color}
-                            size={size}
-                        />
-                    )
+                    tabBarIcon: SearchIcon
                 }}
             />
             <Tab.Screen
@@ -63,32 +58,9 @@ export function BottomNavigation() {
                 component={Library}
                 options={{
                     tabBarLabel: 'Library',
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <MaterialIcons name="album" color={color} size={size} />
-                    )
+                    tabBarIcon: LibraryIcon
                 }}
             />
         </Tab.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: '#7F5DF0',
-        shadowOffset: {
-            width: 0,
-            height: 10
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5
-    },
-    view: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        top: 0
-    },
-    text: {
-        fontSize: 12
-    }
-});

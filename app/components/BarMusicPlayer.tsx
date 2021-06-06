@@ -1,52 +1,44 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { FontAwesome } from 'react-native-vector-icons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors, device, gStyle } from '../constants';
+import { togglePlayback } from '../player';
+import { State } from 'react-native-track-player';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
-class BarMusicPlayer extends React.Component {
-    constructor() {
-        super();
+export const BarMusicPlayer = () => {
+    const navigation = useNavigation();
+    const [favourite, setFavourite] = useState(false);
+    const [paused, setPaused] = useState(true);
 
-        this.state = {
-            favorited: false,
-            paused: true
-        };
+    const song = useSelector((state) => state.song);
 
-        this.toggleFavorite = this.toggleFavorite.bind(this);
-        this.togglePlay = this.togglePlay.bind(this);
-    }
+    const toggleFavorite = () => {
+        setFavourite(!favourite);
+    };
 
-    toggleFavorite() {
-        this.setState((prev) => ({
-            favorited: !prev.favorited
-        }));
-    }
+    const togglePlay = async () => {
+        setPaused(!paused);
+        await togglePlayback(paused ? State.Paused : State.Playing);
+    };
 
-    togglePlay() {
-        this.setState((prev) => ({
-            paused: !prev.paused
-        }));
-    }
+    const favoriteColor = favourite ? colors.brandPrimary : colors.white;
+    const favoriteIcon = favourite ? 'heart' : 'heart-o';
+    const iconPlay = paused ? 'play-circle' : 'pause-circle';
 
-    render() {
-        const { navigation, song } = this.props;
-        const { favorited, paused } = this.state;
-
-        const favoriteColor = favorited ? colors.brandPrimary : colors.white;
-        const favoriteIcon = favorited ? 'heart' : 'heart-o';
-        const iconPlay = paused ? 'play-circle' : 'pause-circle';
-
-        return (
+    return (
+        <React.Fragment>
             <TouchableOpacity
                 activeOpacity={1}
-                onPress={() => navigation.navigate('ModalMusicPlayer')}
+                onPress={() => navigation.navigate('Player')}
                 style={styles.container}
             >
                 <TouchableOpacity
                     activeOpacity={gStyle.activeOpacity}
                     hitSlop={{ bottom: 10, left: 10, right: 10, top: 10 }}
-                    onPress={this.toggleFavorite}
+                    onPress={toggleFavorite}
                     style={styles.containerIcon}
                 >
                     <FontAwesome
@@ -78,7 +70,7 @@ class BarMusicPlayer extends React.Component {
                 <TouchableOpacity
                     activeOpacity={gStyle.activeOpacity}
                     hitSlop={{ bottom: 10, left: 10, right: 10, top: 10 }}
-                    onPress={this.togglePlay}
+                    onPress={togglePlay}
                     style={styles.containerIcon}
                 >
                     <FontAwesome
@@ -88,9 +80,9 @@ class BarMusicPlayer extends React.Component {
                     />
                 </TouchableOpacity>
             </TouchableOpacity>
-        );
-    }
-}
+        </React.Fragment>
+    );
+};
 
 BarMusicPlayer.defaultProps = {
     song: null
@@ -98,7 +90,7 @@ BarMusicPlayer.defaultProps = {
 
 BarMusicPlayer.propTypes = {
     // required
-    navigation: PropTypes.object.isRequired,
+    // navigation: PropTypes.object.isRequired,
 
     // optional
     song: PropTypes.shape({
@@ -118,10 +110,12 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         width: '100%'
     },
+    // @ts-ignore
     containerIcon: {
         ...gStyle.flexCenter,
         width: 50
     },
+    // @ts-ignore
     containerSong: {
         ...gStyle.flexRowCenter,
         overflow: 'hidden',
@@ -142,5 +136,3 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase'
     }
 });
-
-export default BarMusicPlayer;

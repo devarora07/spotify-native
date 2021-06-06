@@ -55,21 +55,18 @@ export const Home = () => {
                 <AlbumsHorizontal
                     data={recentlyPlayed}
                     heading="Recently played"
-                    navigation={{}}
                 />
 
                 <AlbumsHorizontal
                     data={heavyRotation}
                     heading="Your heavy rotation"
                     tagline="The music you've had on repeat this month."
-                    navigation={{}}
                 />
 
                 <AlbumsHorizontal
                     data={jumpBackIn}
                     heading="Jump back in"
                     tagline="Your top listens from the past few months."
-                    navigation={{}}
                 />
             </Animated.ScrollView>
         </React.Fragment>

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Feather, Ionicons } from 'react-native-vector-icons';
+// import { Feather, Ionicons } from 'react-native-vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors, gStyle } from '../constants';
 
 const LineItemSong = ({ active, downloaded, onPress, songData }) => {

@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { APP_ROUTES } from './navigationConstant';
 import { BottomNavigation } from './tabNavigation';
 import { useSelector, RootStateOrAny } from 'react-redux';
+import { ModalMusicPlayer, ModalMoreOptions } from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -22,18 +23,20 @@ const AppRoutes = () => {
 
     return (
         <NavigationContainer ref={navigationRef}>
-            {/* {user.auth ? ( */}
-            <BottomNavigation />
-            {/* ) : (
-                <Stack.Navigator
-                    screenOptions={{
-                        headerShown: false
-                        // headerStyle: {backgroundColor: '#111', height: 60},
-                    }}
-                >
-                    <Stack.Screen name={APP_ROUTES.HOME} component={Home} />
-                </Stack.Navigator>
-            )} */}
+            {/* <BottomNavigation /> */}
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                    // headerStyle: {backgroundColor: '#111', height: 60},
+                }}
+            >
+                <Stack.Screen name={'aa'} component={BottomNavigation} />
+                <Stack.Screen name={'Player'} component={ModalMusicPlayer} />
+                <Stack.Screen
+                    name={'ModalMoreOptions'}
+                    component={ModalMoreOptions}
+                />
+            </Stack.Navigator>
         </NavigationContainer>
     );
 };

@@ -10,7 +10,7 @@ export const Library = () => (
         <View
             style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}
         >
-            <ScreenHeader title="Your Library" navigation={{}} />
+            <ScreenHeader title="Your Library" />
         </View>
 
         <FlatList

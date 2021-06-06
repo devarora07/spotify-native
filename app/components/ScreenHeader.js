@@ -4,28 +4,33 @@ import { StyleSheet, Text, View } from 'react-native';
 // import { BlurView } from 'expo-blur';
 import { Feather } from 'react-native-vector-icons';
 import { colors, device, gStyle } from '../constants';
-
-// components
+import { useNavigation } from '@react-navigation/native';
 import TouchIcon from './TouchIcon';
 
-const ScreenHeader = ({ navigation, showBack, title }) => (
-    <View tint="dark" intensity={95} style={styles.container}>
-        {showBack && (
-            <View style={styles.left}>
-                <TouchIcon
-                    icon={<Feather color={colors.white} name="chevron-left" />}
-                    onPress={() => navigation.goBack(null)}
-                />
+const ScreenHeader = ({ showBack, title }) => {
+    const navigation = useNavigation();
+
+    return (
+        <View tint="dark" intensity={95} style={styles.container}>
+            {showBack && (
+                <View style={styles.left}>
+                    <TouchIcon
+                        icon={
+                            <Feather color={colors.white} name="chevron-left" />
+                        }
+                        onPress={() => navigation.goBack(null)}
+                    />
+                </View>
+            )}
+
+            <View style={styles.containerText}>
+                <Text style={styles.text}>{title}</Text>
             </View>
-        )}
 
-        <View style={styles.containerText}>
-            <Text style={styles.text}>{title}</Text>
+            {showBack && <View style={gStyle.flex1} />}
         </View>
-
-        {showBack && <View style={gStyle.flex1} />}
-    </View>
-);
+    );
+};
 
 ScreenHeader.defaultProps = {
     showBack: false
@@ -33,7 +38,6 @@ ScreenHeader.defaultProps = {
 
 ScreenHeader.propTypes = {
     // required
-    navigation: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
 
     // optional

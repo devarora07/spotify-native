@@ -1,28 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Image, Slider, StyleSheet, Text, View } from 'react-native';
-import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import Slider from '@react-native-community/slider';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { colors, device, func, gStyle, images } from '../constants';
 import ModalHeader from '../components/ModalHeader';
 import TouchIcon from '../components/TouchIcon';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import TrackPlayer, {
+    Capability,
+    Event,
+    RepeatMode,
+    State,
+    usePlaybackState,
+    useProgress,
+    useTrackPlayerEvents
+} from 'react-native-track-player';
+import playlistData from '../player/playlist.json';
+// @ts-ignore
+import localTrack from '../player/tt.m4a';
+import { setup } from '../player';
 
-const ModalMusicPlayer = (props) => {
+const togglePlayback = async (playbackState: State) => {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    console.log(currentTrack, playbackState);
+    if (currentTrack == null) {
+        // TODO: Perhaps present an error or restart the playlist?
+        console.log('current track is null');
+    } else {
+        if (playbackState === State.Paused) {
+            await TrackPlayer.play();
+        } else {
+            await TrackPlayer.pause();
+        }
+    }
+};
+
+export const ModalMusicPlayer = () => {
+    const navigation = useNavigation();
     const [favourite, setFavourite] = useState(false);
-    const [pause, setPause] = useState(true);
+    const [pause, setPause] = useState(false);
 
-    // this.toggleFavorite = this.toggleFavorite.bind(this);
-    // this.togglePlay = this.togglePlay.bind(this);
+    const songState = useSelector((state) => state.song);
+
+    const playbackState = usePlaybackState();
+    const progress = useProgress();
+
+    // can also be used by state mgmt.
+    const [trackArtwork, setTrackArtwork] = useState<string | number>();
+    const [trackTitle, setTrackTitle] = useState<string>();
+    const [trackArtist, setTrackArtist] = useState<string>();
+
+    useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+        if (
+            event.type === Event.PlaybackTrackChanged &&
+            event.nextTrack != null
+        ) {
+            const track = await TrackPlayer.getTrack(event.nextTrack);
+            const { title, artist, artwork } = track || {};
+            setTrackTitle(title);
+            setTrackArtist(artist);
+            setTrackArtwork(artwork);
+        }
+    });
+
+    useEffect(() => {
+        (async () => {
+            await setup(playlistData, localTrack);
+        })();
+    }, []);
 
     const toggleFavorite = () => {
         setFavourite(!favourite);
     };
 
-    const togglePlay = () => {
+    const togglePlay = async () => {
         setPause(!pause);
+        await togglePlayback(playbackState);
     };
 
-    const { navigation, screenProps } = props;
-    const { currentSongData } = screenProps;
+    // const { screenProps } = props;
+    const { currentSongData } = songState;
 
     const favoriteColor = favourite ? colors.brandPrimary : colors.white;
     const favoriteIcon = favourite ? 'heart' : 'heart-o';
@@ -35,7 +96,7 @@ const ModalMusicPlayer = (props) => {
         <View style={gStyle.container}>
             <ModalHeader
                 left={<Feather color={colors.greyLight} name="chevron-down" />}
-                leftPress={() => navigation.goBack(null)}
+                leftPress={() => navigation.goBack()}
                 right={
                     <Feather color={colors.greyLight} name="more-horizontal" />
                 }
@@ -80,6 +141,10 @@ const ModalMusicPlayer = (props) => {
                         maximumValue={currentSongData.length}
                         minimumTrackTintColor={colors.white}
                         maximumTrackTintColor={colors.grey3}
+                        value={progress.position}
+                        onSlidingComplete={async (value) => {
+                            await TrackPlayer.seekTo(value);
+                        }}
                     />
                     <View style={styles.containerTime}>
                         <Text style={styles.time}>{timePast}</Text>
@@ -114,7 +179,8 @@ const ModalMusicPlayer = (props) => {
                                     />
                                 }
                                 iconSize={64}
-                                onPress={togglePlay}
+                                onPress={() => togglePlay()}
+                                // onPress={() => togglePlayback(playbackState)}
                             />
                         </View>
                         <TouchIcon
@@ -125,7 +191,8 @@ const ModalMusicPlayer = (props) => {
                                 />
                             }
                             iconSize={32}
-                            onPress={() => null}
+                            // onPress={() => null}
+                            onPress={() => TrackPlayer.skipToNext()}
                         />
                     </View>
                     <TouchIcon
@@ -158,12 +225,6 @@ const ModalMusicPlayer = (props) => {
     );
 };
 
-ModalMusicPlayer.propTypes = {
-    // required
-    navigation: PropTypes.object.isRequired,
-    screenProps: PropTypes.object.isRequired
-};
-
 const styles = StyleSheet.create({
     image: {
         height: device.width - 48,
@@ -189,6 +250,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
+    // @ts-ignore
     containerTime: {
         ...gStyle.flexRowSpace
     },
@@ -196,10 +258,12 @@ const styles = StyleSheet.create({
         ...gStyle.textSpotify10,
         color: colors.greyInactive
     },
+    // @ts-ignore
     containerControls: {
         ...gStyle.flexRowSpace,
         marginTop: device.iPhoneNotch ? 24 : 8
     },
+    // @ts-ignore
     containerBottom: {
         ...gStyle.flexRowSpace,
         marginTop: device.iPhoneNotch ? 32 : 8
