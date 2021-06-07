@@ -42,7 +42,7 @@ const AlbumsHorizontal = ({ data, heading, tagline }: Props) => {
                         <View style={styles.image}>
                             {item.image && (
                                 <Image
-                                    source={images[item.image]}
+                                    source={{ uri: item.image }}
                                     style={styles.image}
                                 />
                             )}

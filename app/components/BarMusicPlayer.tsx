@@ -6,27 +6,36 @@ import { colors, device, gStyle } from '../constants';
 import { togglePlayback } from '../player';
 import { State } from 'react-native-track-player';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggle_play } from '../redux/song/actions';
+import TrackPlayer, {
+    usePlaybackState,
+    useProgress
+} from 'react-native-track-player';
+import Slider from '@react-native-community/slider';
 
 export const BarMusicPlayer = () => {
-    const navigation = useNavigation();
     const [favourite, setFavourite] = useState(false);
-    const [paused, setPaused] = useState(true);
 
-    const song = useSelector((state) => state.song);
+    const navigation = useNavigation();
+    const songState = useSelector((state) => state.song);
+    const dispatch = useDispatch();
+    const playbackState = usePlaybackState();
+    const progress = useProgress();
 
     const toggleFavorite = () => {
         setFavourite(!favourite);
     };
 
     const togglePlay = async () => {
-        setPaused(!paused);
-        await togglePlayback(paused ? State.Paused : State.Playing);
+        dispatch(toggle_play(playbackState));
     };
 
     const favoriteColor = favourite ? colors.brandPrimary : colors.white;
     const favoriteIcon = favourite ? 'heart' : 'heart-o';
-    const iconPlay = paused ? 'play-circle' : 'pause-circle';
+    const iconPlay = songState.playing ? 'play-circle' : 'pause-circle';
+
+    const { currentSongData } = songState;
 
     return (
         <React.Fragment>
@@ -47,15 +56,17 @@ export const BarMusicPlayer = () => {
                         size={20}
                     />
                 </TouchableOpacity>
-                {song && (
+                {songState && (
                     <View>
                         <View style={styles.containerSong}>
                             <Text
                                 style={styles.title}
-                            >{`${song.title} · `}</Text>
-                            <Text style={styles.artist}>{song.artist}</Text>
+                            >{`${songState.currentSongData?.title} · `}</Text>
+                            <Text style={styles.artist}>
+                                {songState.currentSongData?.artist}
+                            </Text>
                         </View>
-                        <View style={[gStyle.flexRowCenter, gStyle.mTHalf]}>
+                        {/* <View style={[gStyle.flexRowCenter, gStyle.mTHalf]}>
                             <FontAwesome
                                 color={colors.brandPrimary}
                                 name="bluetooth-b"
@@ -64,7 +75,17 @@ export const BarMusicPlayer = () => {
                             <Text style={styles.device}>
                                 Caleb&apos;s Beatsx
                             </Text>
-                        </View>
+                        </View> */}
+                        <Slider
+                            minimumValue={0}
+                            maximumValue={currentSongData.duration}
+                            minimumTrackTintColor={colors.white}
+                            maximumTrackTintColor={colors.grey3}
+                            value={progress.position}
+                            onSlidingComplete={async (value) => {
+                                await TrackPlayer.seekTo(value);
+                            }}
+                        />
                     </View>
                 )}
                 <TouchableOpacity
@@ -82,21 +103,6 @@ export const BarMusicPlayer = () => {
             </TouchableOpacity>
         </React.Fragment>
     );
-};
-
-BarMusicPlayer.defaultProps = {
-    song: null
-};
-
-BarMusicPlayer.propTypes = {
-    // required
-    // navigation: PropTypes.object.isRequired,
-
-    // optional
-    song: PropTypes.shape({
-        artist: PropTypes.string,
-        title: PropTypes.string
-    })
 };
 
 const styles = StyleSheet.create({

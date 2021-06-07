@@ -9,71 +9,29 @@ import {
     View
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-// import { BlurView } from 'expo-blur';
 import { colors, device, gStyle, images } from '../constants';
 import LinearGradient from '../components/LinearGradient';
 import LineItemSong from '../components/LineItemSong';
 import TouchIcon from '../components/TouchIcon';
 import TouchText from '../components/TouchText';
-import albums from '../mockdata/albums';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import PlayerComponent from '../player/playerComponent';
+import anime from '../mockdata/anime';
+import { change_album, change_song } from '../redux/song/actions';
 
 export const Album = (props) => {
+    const { title } = props.route.params;
     const [state, setState] = useState({
-        album: {
-            artist: 'Billie Eilish',
-            backgroundColor: '#363230',
-            image: 'whenWeAllFallAsleep',
-            released: 2019,
-            title: 'WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?',
-            tracks: [
-                { title: '!!!!!!!', seconds: 161 },
-                { title: 'Bad Guy', seconds: 245 },
-                { title: 'Xanny', seconds: 288 },
-                { title: 'You Should See Me in a Crown', seconds: 215 },
-                { title: 'All the Good Girls Go to Hell', seconds: 345 },
-                { title: 'Wish You Were Gay', seconds: 250 },
-                { title: "When the Party's Over", seconds: 287 },
-                { title: '8', seconds: 271 },
-                { title: 'My Strange Addiction', seconds: 210 },
-                { title: 'Bury a Friend', seconds: 237 },
-                { title: 'Ilomilo', seconds: 345 },
-                { title: 'Listen Before I Go', seconds: 347 },
-                { title: 'I Love You', seconds: 312 },
-                { title: 'Goodbye', seconds: 271 }
-            ]
-        },
-        // album: 'Swimming',
+        album: anime[title],
         downloaded: false,
         scrollY: new Animated.Value(0),
-        song: 'So It Goes',
-        title: 'Swimming'
+        song: 'So It Goes'
+        // title: 'Swimming'
     });
 
     const songState = useSelector((state) => state.song);
     const navigation = useNavigation();
-
-    useEffect(() => {
-        // const { screenProps } = props;
-
-        const { currentSongData } = songState;
-        // const albumTitle = navigation.getParam('title', 'ALBUM NOT FOUND?!');
-        // const albumTitle = navigation.getParam(
-        //     'title',
-        //     'Extraordinary Machine'
-        // );
-
-        const albumTitle = 'Extraordinary Machine';
-
-        // setState({
-        //     ...state,
-        //     album: albums[albumTitle] || null,
-        //     song: currentSongData.title,
-        //     title: albumTitle
-        // });
-    }, []);
+    const dispatch = useDispatch();
 
     const toggleDownloaded = (val) => {
         // if web
@@ -114,15 +72,10 @@ export const Album = (props) => {
     };
 
     const changeSong = (songData) => {
-        // const {
-        //     screenProps: { changeSong }
-        // } = props;
-        // dispatch to change song...
-        // changeSong(songData);
-        // setState({
-        //     ...state,
-        //     song: songData.title
-        // });
+        // if album is not same change album...
+
+        console.log('song data', songData);
+        dispatch(change_song(songData));
     };
 
     const toggleBlur = () => {
@@ -133,11 +86,8 @@ export const Album = (props) => {
         setToggleTabBar();
     };
 
-    // const {
-    //     screenProps: { toggleTabBarState, setToggleTabBar }
-    // } = props;
     const { toggleTabBar } = songState;
-    const { album, downloaded, scrollY, song, title } = state;
+    const { album, downloaded, scrollY, song } = state;
 
     // album data not set?
     // if (album === null) {
@@ -214,7 +164,10 @@ export const Album = (props) => {
                     <LinearGradient fill={album.backgroundColor} />
                 </View>
                 <View style={styles.containerImage}>
-                    <Image source={images[album.image]} style={styles.image} />
+                    <Image
+                        source={{ uri: album.imageUrl }}
+                        style={styles.image}
+                    />
                 </View>
                 <View style={styles.containerTitle}>
                     <Text
@@ -278,12 +231,12 @@ export const Album = (props) => {
                                 active={song === track.title}
                                 downloaded={downloaded}
                                 key={index.toString()}
-                                onPress={changeSong}
+                                onPress={() => changeSong(track)}
                                 songData={{
                                     album: album.title,
                                     artist: album.artist,
                                     image: album.image,
-                                    length: track.seconds,
+                                    length: track.duration,
                                     title: track.title
                                 }}
                             />

@@ -1,0 +1,20 @@
+{
+    "artist": "Koe No Katachi",
+    "backgroundColor": "#70603b",
+    "image": "asd",
+    "released": 2019,
+    "title": "Koe No Katachi",
+    "imageUrl": "https://i.pinimg.com/originals/3f/34/d9/3f34d982881af19d74b50f2f60f634a1.jpg",
+    "tracks": [
+        {
+            "title": "Koe Wo Shita No Wa",
+            "duration": 235,
+            "url": "https://ia800801.us.archive.org/34/items/AnisicsArchiveThree/musics/music11136.mp3"
+        },
+        {
+            "title": "My Generation",
+            "duration": 235,
+            "url": "https://ia800801.us.archive.org/34/items/AnisicsArchiveThree/musics/music11137.mp3"
+        }
+    ]
+}

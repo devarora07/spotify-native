@@ -1,0 +1,20 @@
+{
+    "artist": "Tokyo Ghoul",
+    "backgroundColor": "#70603b",
+    "image": "asd",
+    "released": 2019,
+    "title": "Tokyo Ghoul",
+    "imageUrl": "https://io.dropinblog.com/uploaded/blogs/34239009/files/featured/42370110_Tokyo_Ghoul_1.jpg",
+    "tracks": [
+        {
+            "title": "Seija-tachi",
+            "duration": 235,
+            "url": "https://ia800607.us.archive.org/26/items/AnisicsArchive/musics/music1971.mp3"
+        },
+        {
+            "title": "Unravel",
+            "duration": 235,
+            "url": "https://ia800607.us.archive.org/26/items/AnisicsArchive/musics/music1974.mp3"
+        }
+    ]
+}

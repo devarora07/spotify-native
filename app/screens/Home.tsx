@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors, device, gStyle } from '../constants';
-
-// components
 import AlbumsHorizontal from '../components/AlbumsHorizontal';
-
-// mock data
 import heavyRotation from '../mockdata/heavyRotation.json';
 import jumpBackIn from '../mockdata/jumpBackIn.json';
 import recentlyPlayed from '../mockdata/recentlyPlayed.json';
+import animeTrending from '../mockdata/trendingAnime.json';
 
 export const Home = () => {
     const [state, setState] = useState({ scrollY: new Animated.Value(0) });
@@ -38,7 +36,7 @@ export const Home = () => {
             <Animated.View
                 style={[styles.containerHeader, { opacity: opacityOut }]}
             >
-                {/* <FontAwesome color={colors.white} name="cog" size={28} /> */}
+                <FontAwesome color={colors.white} name="cog" size={28} />
             </Animated.View>
 
             <Animated.ScrollView
@@ -52,6 +50,7 @@ export const Home = () => {
             >
                 <View style={gStyle.spacer16} />
 
+                <AlbumsHorizontal data={animeTrending} heading="Trending" />
                 <AlbumsHorizontal
                     data={recentlyPlayed}
                     heading="Recently played"

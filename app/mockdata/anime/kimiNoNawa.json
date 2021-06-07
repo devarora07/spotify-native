@@ -1,0 +1,55 @@
+{
+    "artist": "Kimi No Nawa",
+    "backgroundColor": "#70603b",
+    "image": "asd",
+    "released": 2019,
+    "title": "Kimi No Nawa",
+    "imageUrl": "https://static.wikia.nocookie.net/kiminonawa/images/6/62/Kimi-no-Na-wa.-Visual.jpg/revision/latest?cb=20160927170951",
+    "tracks": [
+        {
+            "title": "Kimi No Nawa Op 1",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa1.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 2",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa2.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 3",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa3.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 4",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa4.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 5",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa5.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 6",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa6.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 7",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa7.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 8",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa8.mp3"
+        },
+        {
+            "title": "Kimi No Nawa Op 9",
+            "duration": 235,
+            "url": "https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa9.mp3"
+        }
+    ]
+}

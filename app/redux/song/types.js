@@ -1,6 +1,8 @@
-export const score = {
-  NEW_GAME: 'NEW_GAME',
-  ADD_SCORE: 'ADD_SCORE',
-  HIGH_SCORE: 'HIGH_SCORE',
-  FETCH_SCORE: 'FETCH_SCORE',
+export const Types = {
+    TOGGLE_PLAY: 'TOGGLE_PLAY',
+    NEXT_SONG: 'NEXT_SONG',
+    PREV_SONG: 'PREV_SONG',
+    ADD_SONG: 'ADD_SONG',
+    CHANGE_SONG: 'CHANGE_SONG',
+    CHANGE_ALBUM: 'CHANGE_ALBUM'
 };

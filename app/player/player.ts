@@ -4,7 +4,7 @@ import TrackPlayer, {
     State
 } from 'react-native-track-player';
 
-export const setup = async (playlistData, localTrack) => {
+export const setup = async () => {
     try {
         await TrackPlayer.setupPlayer({});
         await TrackPlayer.updateOptions({
@@ -16,18 +16,29 @@ export const setup = async (playlistData, localTrack) => {
                 Capability.SkipToPrevious,
                 Capability.Stop
             ],
-            compactCapabilities: [Capability.Play, Capability.Pause]
+            notificationCapabilities: [
+                Capability.Play,
+                Capability.Pause,
+                Capability.SkipToNext,
+                Capability.SkipToPrevious,
+                Capability.Stop
+            ],
+            compactCapabilities: [
+                Capability.Play,
+                Capability.Pause,
+                Capability.SkipToNext,
+                Capability.SkipToPrevious,
+                Capability.Stop
+            ]
         });
-
-        await TrackPlayer.add(playlistData);
-        await TrackPlayer.add({
-            url: localTrack,
-            title: 'Pure (Demo)',
-            artist: 'David Chavez',
-            artwork:
-                'https://i.scdn.co/image/e5c7b168be89098eb686e02152aaee9d3a24e5b6',
-            duration: 28
-        });
+        // await TrackPlayer.add({
+        //     url: 'https://ia600607.us.archive.org/26/items/AnisicsArchive/musics/Kiminonawa3.mp3',
+        //     title: 'Pure (Demo)',
+        //     artist: 'David Chavez',
+        //     artwork:
+        //         'https://i.scdn.co/image/e5c7b168be89098eb686e02152aaee9d3a24e5b6',
+        //     duration: 28
+        // });
 
         TrackPlayer.setRepeatMode(RepeatMode.Queue);
 
@@ -37,6 +48,20 @@ export const setup = async (playlistData, localTrack) => {
     } catch (err) {
         console.log('err', err);
     }
+};
+
+export const changeSong = async (data) => {
+    try {
+        await TrackPlayer.reset();
+        await TrackPlayer.add(data);
+        await TrackPlayer.play();
+    } catch (err) {
+        console.log('err', err);
+    }
+};
+
+export const addSongToQueue = async (data) => {
+    await TrackPlayer.add(data);
 };
 
 export const togglePlayback = async (playbackState: State) => {

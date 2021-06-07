@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Feather from 'react-native-vector-icons/Feather';
@@ -9,7 +8,7 @@ import { colors, device, func, gStyle, images } from '../constants';
 import ModalHeader from '../components/ModalHeader';
 import TouchIcon from '../components/TouchIcon';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TrackPlayer, {
     Capability,
     Event,
@@ -19,40 +18,18 @@ import TrackPlayer, {
     useProgress,
     useTrackPlayerEvents
 } from 'react-native-track-player';
-import playlistData from '../player/playlist.json';
-// @ts-ignore
-import localTrack from '../player/tt.m4a';
 import { setup } from '../player';
-
-const togglePlayback = async (playbackState: State) => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    console.log(currentTrack, playbackState);
-    if (currentTrack == null) {
-        // TODO: Perhaps present an error or restart the playlist?
-        console.log('current track is null');
-    } else {
-        if (playbackState === State.Paused) {
-            await TrackPlayer.play();
-        } else {
-            await TrackPlayer.pause();
-        }
-    }
-};
+import { toggle_play } from '../redux/song/actions';
+// import { fetchSong } from '../api';
 
 export const ModalMusicPlayer = () => {
     const navigation = useNavigation();
     const [favourite, setFavourite] = useState(false);
-    const [pause, setPause] = useState(false);
 
     const songState = useSelector((state) => state.song);
-
+    const dispatch = useDispatch();
     const playbackState = usePlaybackState();
     const progress = useProgress();
-
-    // can also be used by state mgmt.
-    const [trackArtwork, setTrackArtwork] = useState<string | number>();
-    const [trackTitle, setTrackTitle] = useState<string>();
-    const [trackArtist, setTrackArtist] = useState<string>();
 
     useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
         if (
@@ -60,37 +37,39 @@ export const ModalMusicPlayer = () => {
             event.nextTrack != null
         ) {
             const track = await TrackPlayer.getTrack(event.nextTrack);
-            const { title, artist, artwork } = track || {};
-            setTrackTitle(title);
-            setTrackArtist(artist);
-            setTrackArtwork(artwork);
         }
     });
 
-    useEffect(() => {
-        (async () => {
-            await setup(playlistData, localTrack);
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         await setup();
+    //     })();
+    // }, []);
+
+    const { currentSongData, album } = songState;
+
+    const favoriteColor = favourite ? colors.brandPrimary : colors.white;
+    const favoriteIcon = favourite ? 'heart' : 'heart-o';
+    const iconPlay = songState.playing ? 'play-circle' : 'pause-circle';
+
+    const timePast = func.formatTime(0);
+    const timeLeft = func.formatTime(currentSongData.duration);
 
     const toggleFavorite = () => {
         setFavourite(!favourite);
     };
 
     const togglePlay = async () => {
-        setPause(!pause);
-        await togglePlayback(playbackState);
+        dispatch(toggle_play(playbackState));
     };
 
-    // const { screenProps } = props;
-    const { currentSongData } = songState;
+    const handlePrev = () => {
+        TrackPlayer.skipToPrevious();
+    };
 
-    const favoriteColor = favourite ? colors.brandPrimary : colors.white;
-    const favoriteIcon = favourite ? 'heart' : 'heart-o';
-    const iconPlay = pause ? 'play-circle' : 'pause-circle';
-
-    const timePast = func.formatTime(0);
-    const timeLeft = func.formatTime(currentSongData.length);
+    const handleNext = () => {
+        TrackPlayer.skipToNext();
+    };
 
     return (
         <View style={gStyle.container}>
@@ -104,10 +83,7 @@ export const ModalMusicPlayer = () => {
             />
 
             <View style={gStyle.p3}>
-                <Image
-                    source={images[currentSongData.image]}
-                    style={styles.image}
-                />
+                <Image source={{ uri: album.imageUrl }} style={styles.image} />
 
                 <View style={[gStyle.flexRowSpace, styles.containerDetails]}>
                     <View style={styles.containerSong}>
@@ -138,7 +114,7 @@ export const ModalMusicPlayer = () => {
                 <View style={styles.containerVolume}>
                     <Slider
                         minimumValue={0}
-                        maximumValue={currentSongData.length}
+                        maximumValue={currentSongData.duration}
                         minimumTrackTintColor={colors.white}
                         maximumTrackTintColor={colors.grey3}
                         value={progress.position}
@@ -168,7 +144,7 @@ export const ModalMusicPlayer = () => {
                                 />
                             }
                             iconSize={32}
-                            onPress={() => null}
+                            onPress={() => handlePrev()}
                         />
                         <View style={gStyle.pH3}>
                             <TouchIcon
@@ -180,7 +156,6 @@ export const ModalMusicPlayer = () => {
                                 }
                                 iconSize={64}
                                 onPress={() => togglePlay()}
-                                // onPress={() => togglePlayback(playbackState)}
                             />
                         </View>
                         <TouchIcon
@@ -191,8 +166,7 @@ export const ModalMusicPlayer = () => {
                                 />
                             }
                             iconSize={32}
-                            // onPress={() => null}
-                            onPress={() => TrackPlayer.skipToNext()}
+                            onPress={handleNext}
                         />
                     </View>
                     <TouchIcon

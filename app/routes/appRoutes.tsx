@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     NavigationContainer,
     NavigationContainerRef
@@ -8,6 +8,7 @@ import { APP_ROUTES } from './navigationConstant';
 import { BottomNavigation } from './tabNavigation';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { ModalMusicPlayer, ModalMoreOptions } from '../screens';
+import { setup } from '../player';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,12 @@ export function navigate(name: string, params: any) {
 
 const AppRoutes = () => {
     // const user = useSelector((state: RootStateOrAny) => state.user);
+
+    useEffect(() => {
+        (async () => {
+            await setup();
+        })();
+    }, []);
 
     return (
         <NavigationContainer ref={navigationRef}>

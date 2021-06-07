@@ -1,0 +1,20 @@
+{
+    "artist": "Naruto Shipudden",
+    "backgroundColor": "#70603b",
+    "image": "asd",
+    "released": 2019,
+    "title": "Naruto Shipudden",
+    "imageUrl": "https://www.anime-planet.com/images/anime/covers/naruto-shippuden-1131.jpg",
+    "tracks": [
+        {
+            "title": "Heroes Come Back",
+            "duration": 235,
+            "url": "https://ia800607.us.archive.org/26/items/AnisicsArchive/musics/music600.mp3"
+        },
+        {
+            "title": "Blue Bird",
+            "duration": 235,
+            "url": "https://ia800607.us.archive.org/26/items/AnisicsArchive/musics/music602.mp3"
+        }
+    ]
+}
