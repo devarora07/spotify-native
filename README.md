@@ -1,7 +1,13 @@
 ## spotify-native
 
+<br />
+
 Sample Output:
-![image info](./screenshot/image1.jpg) ![image info](./screenshot/image2.jpg) ![image info](./screenshot/image3.jpg)
+
+<img src="./screenshot/image1.jpg" width="150">
+<img src="./screenshot/image2.jpg" width="150">
+<img src="./screenshot/image3.jpg" width="150">
+<br />
 
 ### Run locally on android/ios device or on emulator
 
