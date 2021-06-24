@@ -1,8 +1,10 @@
-## spotify-native
+# Spotify Native
 
-<br />
+A clone of spotify in react native.
 
-Sample Output:
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+
+## Screenshots
 
 <p float="left">
 <img src="./screenshot/image1.jpg" width="150">
@@ -11,14 +13,28 @@ Sample Output:
 </p>
 <br />
 
-### Run locally on android/ios device or on emulator
+## Run Locally
 
-npm install
+Clone the project
 
-npm run android or npm run ios
+```bash
+  git clone https://link-to-project
+```
 
-### Build on android
+Go to the project directory
 
-cd android
+```bash
+  cd spotify-native
+```
 
-./gradlew assembleRelease
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the metro server
+
+```bash
+  npm run android/ios
+```

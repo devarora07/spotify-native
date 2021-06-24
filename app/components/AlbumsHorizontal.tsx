@@ -11,10 +11,14 @@ import {
 import { colors, gStyle, images } from '../constants';
 import { useNavigation } from '@react-navigation/native';
 
+type CardType = {
+    id: number;
+    text: string;
+    url: string;
+};
+
 type Props = {
-    data: any;
-    heading: string;
-    tagline: string;
+    data: CardType[];
 };
 
 const AlbumsHorizontal = ({ data, heading, tagline }: Props) => {
