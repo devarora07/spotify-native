@@ -2,7 +2,7 @@
 
 A clone of spotify in react native.
 
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/dr0id007/spotify-native/blob/master/LICENSE)
 
 ## Screenshots
 
@@ -18,7 +18,7 @@ A clone of spotify in react native.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/dr0id007/spotify-native.git
 ```
 
 Go to the project directory
